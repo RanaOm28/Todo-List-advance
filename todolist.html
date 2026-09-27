@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#f3f6f3">
+	<title>Daymark — To-do list</title>
+	<link rel="stylesheet" href="todolist.css">
+	<script src="todolist.js" defer></script>
+</head>
+<body>
+	<div class="app-shell">
+		<aside class="sidebar" aria-label="Task navigation">
+			<a class="brand" href="#main" aria-label="Daymark home">
+				<span class="brand-mark" aria-hidden="true">d.</span>
+				<span>daymark</span>
+			</a>
+
+			<p class="nav-heading">WORKSPACE</p>
+			<nav class="nav-list" aria-label="Task views">
+				<button class="nav-item is-active" type="button" data-filter="all">
+					<span class="nav-icon" aria-hidden="true">&#9633;</span>
+					<span>All tasks</span>
+					<span class="nav-count" id="allCount">0</span>
+				</button>
+				<button class="nav-item" type="button" data-filter="today">
+					<span class="nav-icon" aria-hidden="true">&#9711;</span>
+					<span>Today</span>
+					<span class="nav-count" id="todayCount">0</span>
+				</button>
+				<button class="nav-item" type="button" data-filter="upcoming">
+					<span class="nav-icon" aria-hidden="true">&#8594;</span>
+					<span>Upcoming</span>
+				</button>
+				<button class="nav-item" type="button" data-filter="completed">
+					<span class="nav-icon" aria-hidden="true">&#10003;</span>
+					<span>Completed</span>
+				</button>
+			</nav>
+
+			<p class="nav-heading category-heading">CATEGORIES</p>
+			<nav class="nav-list" aria-label="Task categories">
+				<button class="nav-item category-item" type="button" data-category="Work">
+					<span class="category-dot dot-work" aria-hidden="true"></span><span>Work</span>
+				</button>
+				<button class="nav-item category-item" type="button" data-category="Personal">
+					<span class="category-dot dot-personal" aria-hidden="true"></span><span>Personal</span>
+				</button>
+				<button class="nav-item category-item" type="button" data-category="Study">
+					<span class="category-dot dot-study" aria-hidden="true"></span><span>Study</span>
+				</button>
+			</nav>
+
+			<section class="sidebar-note" aria-label="Daily progress">
+				<div class="note-topline"><span>DAILY FOCUS</span><span aria-hidden="true">&#10022;</span></div>
+				<p><strong id="progressLabel">A fresh start.</strong><br>One step at a time.</p>
+				<div class="progress-track" role="progressbar" aria-label="Today's tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+					<span id="progressBar"></span>
+				</div>
+			</section>
+			<p class="sidebar-footer">A little more intentional, every day.</p>
+		</aside>
+
+		<main class="main-content" id="main">
+			<header class="topbar">
+				<p class="date-line" id="todayDate"></p>
+				<span class="topbar-label"><span class="status-dot"></span> YOUR PERSONAL SPACE</span>
+			</header>
+
+			<section class="intro" aria-labelledby="pageTitle">
+				<p class="eyebrow">MAKE ROOM FOR WHAT MATTERS</p>
+				<h1 id="pageTitle">A clear mind<br><em>starts here.</em></h1>
+				<p class="intro-copy">Gather your thoughts. Find your next small step.</p>
+			</section>
+
+			<section class="task-composer" aria-label="Add a task">
+				<form id="taskForm">
+					<label class="visually-hidden" for="taskTitle">Task name</label>
+					<input id="taskTitle" name="title" type="text" maxlength="120" placeholder="What would you like to get done?" autocomplete="off" required>
+					<div class="form-controls">
+						<label class="select-wrap">
+							<span class="visually-hidden">Category</span>
+							<select id="taskCategory" name="category" aria-label="Category">
+								<option value="Personal">Personal</option>
+								<option value="Work">Work</option>
+								<option value="Study">Study</option>
+							</select>
+						</label>
+						<label class="select-wrap priority-wrap">
+							<span class="visually-hidden">Priority</span>
+							<select id="taskPriority" name="priority" aria-label="Priority">
+								<option value="low">Low priority</option>
+								<option value="medium" selected>Medium priority</option>
+								<option value="high">High priority</option>
+							</select>
+						</label>
+						<label class="date-wrap">
+							<span class="visually-hidden">Due date</span>
+							<input id="taskDate" name="dueDate" type="date" aria-label="Due date">
+						</label>
+						<button class="add-button" type="submit"><span aria-hidden="true">+</span><span id="submitLabel">Add task</span></button>
+						<button class="cancel-button" id="cancelEdit" type="button" hidden>Cancel</button>
+					</div>
+				</form>
+			</section>
+
+			<section class="tasks-section" aria-labelledby="listTitle">
+				<div class="section-heading">
+					<div>
+						<p class="eyebrow">YOUR PLAN</p>
+						<h2 id="listTitle">All tasks <span class="heading-count" id="headingCount">0</span></h2>
+					</div>
+					<button class="clear-button" id="clearCompleted" type="button" hidden>Clear completed</button>
+				</div>
+
+				<div class="list-toolbar">
+					<label class="search-box">
+						<span aria-hidden="true">&#9906;</span>
+						<span class="visually-hidden">Search tasks</span>
+						<input id="searchInput" type="search" placeholder="Search your tasks..." autocomplete="off">
+					</label>
+					<label class="sort-wrap"><span class="visually-hidden">Sort tasks</span>
+						<select id="sortSelect" aria-label="Sort tasks">
+							<option value="date">Due date</option>
+							<option value="priority">Priority</option>
+							<option value="newest">Recently added</option>
+						</select>
+					</label>
+				</div>
+
+				<ul class="task-list" id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
+				<div class="empty-state" id="emptyState">
+					<span class="empty-mark" aria-hidden="true">&#10022;</span>
+					<h3 id="emptyTitle">A little breathing room.</h3>
+					<p id="emptyMessage">Add your first task above and make today yours.</p>
+				</div>
+			</section>
+			<footer class="main-footer"><span id="footerSummary">Your tasks stay saved on this device.</span><span>MADE FOR YOUR MOMENTUM</span></footer>
+		</main>
+	</div>
+</body>
+</html>
